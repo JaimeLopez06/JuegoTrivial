@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f5f2">
+  <meta name="description" content="Un trivial de cultura general para jugar en compañía.">
+  <title>Trivial — Cultura general</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#" aria-label="Trivial, inicio">
+      <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></span>
+      <span>trivial<span class="brand-period">.</span></span>
+    </a>
+    <span class="header-note">CULTURA GENERAL · 2—4 JUGADORES</span>
+  </header>
+
+  <main>
+    <section id="setup-screen" class="setup-screen">
+      <div class="setup-copy">
+        <span class="eyebrow"><span class="eyebrow-line"></span>EL JUEGO DE SIEMPRE, A TU MANERA</span>
+        <h1>Una buena partida<br>empieza con una <em>pregunta.</em></h1>
+        <p class="setup-lede">Pon a prueba lo que sabes, consigue los seis quesitos y gana el desafío final.</p>
+        <div class="feature-row">
+          <span><i class="feature-dot dot-green"></i>6 categorías</span>
+          <span><i class="feature-dot dot-blue"></i>1–4 jugadores</span>
+          <span><i class="feature-dot dot-gold"></i>Sin registro</span>
+        </div>
+      </div>
+
+      <div class="setup-card">
+        <div class="card-heading">
+          <div>
+            <span class="eyebrow">PREPARA LA PARTIDA</span>
+            <h2>¿Quién juega hoy?</h2>
+          </div>
+          <span class="setup-step">01 <span>/ 01</span></span>
+        </div>
+
+        <fieldset class="player-count">
+          <legend>Número de jugadores</legend>
+          <div class="count-options">
+            <label class="count-option">
+              <input type="radio" name="player-count" value="1" checked>
+              <span>1</span>
+              <small>Solo</small>
+            </label>
+            <label class="count-option">
+              <input type="radio" name="player-count" value="2">
+              <span>2</span>
+              <small>Duelo</small>
+            </label>
+            <label class="count-option">
+              <input type="radio" name="player-count" value="3">
+              <span>3</span>
+              <small>Grupo</small>
+            </label>
+            <label class="count-option">
+              <input type="radio" name="player-count" value="4">
+              <span>4</span>
+              <small>Grupo</small>
+            </label>
+          </div>
+        </fieldset>
+
+        <div id="player-names" class="player-names"></div>
+        <button id="start-game" class="button button-primary button-wide">
+          Empezar partida <span aria-hidden="true">→</span>
+        </button>
+        <p class="setup-footnote">Las reglas son sencillas. La gloria, no tanto.</p>
+      </div>
+      <div class="setup-decoration" aria-hidden="true">
+        <span class="deco-ring"></span><span class="deco-dot deco-dot-one"></span><span class="deco-dot deco-dot-two"></span>
+      </div>
+    </section>
+
+    <section id="game-screen" class="game-screen hidden" aria-label="Partida de trivial">
+      <div class="game-heading">
+        <div>
+          <span class="eyebrow">PARTIDA EN CURSO</span>
+          <h1>A jugar<span class="brand-period">.</span></h1>
+        </div>
+        <button id="new-game" class="button button-subtle"><span aria-hidden="true">↻</span> Nueva partida</button>
+      </div>
+
+      <div class="game-layout">
+        <section class="board-card" aria-label="Tablero">
+          <div class="board-card-heading">
+            <div>
+              <span class="eyebrow">EL TABLERO</span>
+              <h2 id="turn-heading">Turno de…</h2>
+            </div>
+            <span id="turn-indicator" class="turn-indicator"><i></i> TU TURNO</span>
+          </div>
+          <div id="board-container" class="board-container">
+            <canvas id="board" width="700" height="700" aria-label="Tablero circular con seis categorías"></canvas>
+            <div id="pieces-layer" class="pieces-layer" aria-hidden="true"></div>
+          </div>
+          <div class="category-legend" id="category-legend"></div>
+        </section>
+
+        <aside class="game-sidebar">
+          <section class="turn-card">
+            <div class="turn-card-top">
+              <span class="eyebrow">TU JUGADA</span>
+              <span id="dice-value" class="dice-value" aria-live="polite">—</span>
+            </div>
+            <p id="turn-message" class="turn-message">Tira el dado para empezar.</p>
+            <button id="roll-dice" class="button button-primary button-wide">
+              <span class="dice-icon" aria-hidden="true">⚄</span> Tirar el dado
+            </button>
+            <p class="turn-hint">Responde bien y conserva el turno.</p>
+          </section>
+
+          <section class="side-card">
+            <div class="side-card-heading">
+              <div><span class="eyebrow">LA MESA</span><h2>Jugadores</h2></div>
+              <span id="player-count-label" class="small-count"></span>
+            </div>
+            <div id="scoreboard" class="scoreboard"></div>
+          </section>
+
+          <section class="side-card collection-card">
+            <div class="side-card-heading">
+              <div><span class="eyebrow">TU COLECCIÓN</span><h2>Los quesitos</h2></div>
+              <span id="cheese-count" class="cheese-count">0 <span>/ 6</span></span>
+            </div>
+            <div id="collection" class="collection"></div>
+            <p id="collection-note" class="collection-note">Una respuesta correcta en una casilla especial te da su quesito.</p>
+          </section>
+
+          <p class="rules-note"><span aria-hidden="true">✳</span> Cada casilla pregunta su categoría; solo las casillas especiales dan quesito. Reúne los seis y supera el reto del centro.</p>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <div id="question-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="question-title">
+    <div class="question-panel">
+      <div id="question-content">
+        <span id="question-kicker" class="eyebrow">PREGUNTA</span>
+        <div id="question-category" class="question-category"></div>
+        <h2 id="question-title"></h2>
+        <div id="answers" class="answers"></div>
+        <div id="answer-feedback" class="answer-feedback" aria-live="polite"></div>
+        <button id="continue-turn" class="button button-primary button-wide hidden">Continuar <span aria-hidden="true">→</span></button>
+      </div>
+      <div id="winner-content" class="winner-panel hidden">
+        <div class="winner-icon" aria-hidden="true">✳</div>
+        <span class="eyebrow">PARTIDA COMPLETADA</span>
+        <h2 id="winner-title">¡Victoria!</h2>
+        <p>Seis quesitos, un montón de buenas respuestas y una gran partida.</p>
+        <button id="play-again" class="button button-primary button-wide">Jugar otra vez <span aria-hidden="true">→</span></button>
+      </div>
+    </div>
+  </div>
+
+  <div id="direction-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="direction-title">
+    <div class="question-panel direction-panel">
+      <span class="eyebrow">ELIGE TU CAMINO</span>
+      <div id="direction-roll" class="direction-roll">⚄ <span>—</span></div>
+      <h2 id="direction-title">¿En qué dirección quieres avanzar?</h2>
+      <p class="direction-description">Tu elección puede cambiar la categoría de la pregunta… y acercarte a un quesito.</p>
+      <div class="direction-actions">
+        <button id="direction-clockwise" class="button button-primary button-wide">
+          <span aria-hidden="true">↻</span> Sentido horario
+        </button>
+        <button id="direction-counter" class="button button-subtle button-wide">
+          <span aria-hidden="true">↺</span> Sentido antihorario
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="questions.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
